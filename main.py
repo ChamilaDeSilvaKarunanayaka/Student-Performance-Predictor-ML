@@ -1,34 +1,41 @@
 import pandas as pd
-from sklearn.model_selection import train_test_split   # Importing the function to split the dataset into training and testing sets
-from sklearn.linear_model import LogisticRegression    # Importing the Logistic Regression model
-from sklearn.metrics import accuracy_score          # Importing the function to evaluate the accuracy of the model
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import accuracy_score
 
-data = pd.read_csv("data/student_data.csv") 
+# Load dataset
+data = pd.read_csv("data/student_data.csv")
 
-x = data[[ "hours", "attendance" ]] 
+# Input (X) and Output (y)
+x = data[["hours", "attendance"]]
 y = data["result"]
 
-y = y.map({"fail": 0, "pass": 1}) #Encoding the labels
+# Encode labels (fail=0, pass=1)
+y = y.map({"fail": 0, "pass": 1})
 
+# Split dataset (80% train, 20% test)
 X_train, X_test, y_train, y_test = train_test_split(
-    x, y, test_size=0.2
-) #Splitting the dataset into training and testing sets, with 20% of the data reserved for testing
+    x, y, test_size=0.2, random_state=42
+)
 
-model = LogisticRegression() #Creating an instance of the Logistic Regression model
+# Create model
+model = LogisticRegression()
 
-model.fit(X_train, y_train) #Training the model using the training data
+# Train model
+model.fit(X_train, y_train)
 
-prediction = model.predict([[5, 75]]) #Making a prediction for a student who studies 5 hours and has 75% attendance)
-prediction = model.predict([[2, 40]])
-prediction = model.predict([[8, 95]])
+# Predictions (fixed with DataFrame → no warning)
+p1 = model.predict(pd.DataFrame([[5, 75]], columns=["hours", "attendance"]))
+p2 = model.predict(pd.DataFrame([[2, 40]], columns=["hours", "attendance"]))
+p3 = model.predict(pd.DataFrame([[8, 95]], columns=["hours", "attendance"]))
 
-if prediction[0] == 1:
-    print("Result: PASS")
-else:
-    print("Result: FAIL")
+# Print results
+print("5h,75%:", "PASS" if p1[0] == 1 else "FAIL")
+print("2h,40%:", "PASS" if p2[0] == 1 else "FAIL")
+print("8h,95%:", "PASS" if p3[0] == 1 else "FAIL")
 
+# Test accuracy
 y_pred = model.predict(X_test)
-
 accuracy = accuracy_score(y_test, y_pred)
 
 print("\nModel Accuracy:", accuracy)
