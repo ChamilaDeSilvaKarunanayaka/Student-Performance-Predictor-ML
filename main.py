@@ -1,4 +1,5 @@
 import pandas as pd
+import joblib
 from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import accuracy_score
@@ -23,6 +24,7 @@ model = LogisticRegression()
 
 # Train model
 model.fit(X_train, y_train)
+joblib.dump(model, "models/student_model.pkl") # Save model
 
 # Predictions (fixed with DataFrame → no warning)
 p1 = model.predict(pd.DataFrame([[5, 75]], columns=["hours", "attendance"]))
