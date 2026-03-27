@@ -1,5 +1,6 @@
 import pandas as pd
 import joblib
+import matplotlib.pyplot as plt
 from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import accuracy_score
@@ -41,3 +42,17 @@ y_pred = model.predict(X_test)
 accuracy = accuracy_score(y_test, y_pred)
 
 print("\nModel Accuracy:", accuracy)
+
+# Hours vs Result
+plt.scatter(data["hours"], y, c=y)
+plt.xlabel("Study Hours")
+plt.ylabel("Result (0 = Fail, 1 = Pass)")
+plt.title("Study Hours vs Result")
+plt.show()
+
+# Attendance vs Result
+plt.scatter(data["attendance"], y, c=y)
+plt.xlabel("Attendance")
+plt.ylabel("Result (0 = Fail, 1 = Pass)")
+plt.title("Attendance vs Result")
+plt.show()
