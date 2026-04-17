@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Student Predictor</title>
+    <style>
+        body {
+            font-family: Arial;
+            background-color: #f4f4f4;
+            text-align: center;
+            margin-top: 100px;
+        }
+
+        .container {
+            background: white;
+            padding: 30px;
+            width: 300px;
+            margin: auto;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px gray;
+        }
+
+        input {
+            width: 90%;
+            padding: 10px;
+            margin: 10px;
+        }
+
+        button {
+            padding: 10px 20px;
+            background: #007BFF;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #0056b3;
+        }
+
+        #result {
+            margin-top: 20px;
+            font-size: 20px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+    <h2>🎓 Student Predictor</h2>
+
+    <input type="number" id="hours" placeholder="Study Hours">
+    <input type="number" id="attendance" placeholder="Attendance">
+
+    <button onclick="predict()">Predict</button>
+
+    <div id="result"></div>
+</div>
+
+<script>
+async function predict() {
+    let hours = document.getElementById("hours").value;
+    let attendance = document.getElementById("attendance").value;
+
+    if (!hours || !attendance) {
+        alert("Please enter all fields");
+        return;
+    }
+
+    let response = await fetch("http://127.0.0.1:8000/predict", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            hours: parseFloat(hours),
+            attendance: parseFloat(attendance)
+        })
+    });
+
+    let data = await response.json();
+
+    let resultDiv = document.getElementById("result");
+    resultDiv.innerText = "Result: " + data.result;
+
+    if (data.result === "PASS") {
+        resultDiv.style.color = "green";
+    } else {
+        resultDiv.style.color = "red";
+    }
+}
+</script>
+
+</body>
+</html>
